@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Happy Birthday Roshni 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;800&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1: linear-gradient(135deg,#ff9eb5,#fcb3ff);
+    --accent: #fff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:'Poppins',sans-serif;background:#0b0b0f;color:var(--accent);overflow:hidden}
+  .wrap{height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative}
+  .page{width:100%;max-width:920px;height:80vh;background:transparent;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px;border-radius:18px;text-align:center}
+  .active{display:flex}
+  h1{font-weight:800;margin:0;font-size:clamp(28px,5vw,48px);font-family:'Great Vibes', cursive}
+  p{margin:0;font-size:clamp(14px,2vw,20px)}
+  .btn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.12);padding:10px 18px;border-radius:12px;cursor:pointer;font-weight:600}
+  .small{font-size:14px;opacity:0.9}
+  /* fireworks canvas */
+  #fw{position:fixed;inset:0;pointer-events:none;z-index:0}
+  /* sparkle */
+  .card{position:relative;z-index:2;backdrop-filter: blur(6px);padding:20px;border-radius:16px}
+  /* candle */
+  .candle-wrap{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .candle-img{width:160px;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.5))}
+  .hidden{display:none}
+  /* confetti for cake */
+  .confetti{position:absolute;inset:0;pointer-events:none;z-index:3}
+  /* input */
+  input[type="text"]{padding:12px 14px;border-radius:10px;border:none;outline:none;font-size:16px}
+  /* footer nav */
+  .nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:12px}
+  /* sparkle text */
+  .shine{background:linear-gradient(90deg,#fff8 0%, #fff 50%, #fff8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;animation:glow 2s infinite}
+  @keyframes glow{0%{filter:blur(0)brightness(1)}50%{filter:blur(0.6px)brightness(1.25)}100%{filter:blur(0)brightness(1)}}
+  /* cake emoji big */
+  .bigcake{font-size:72px}
+  /* responsive */
+  @media(max-width:520px){ .candle-img{width:120px} h1{font-size:36px} .bigcake{font-size:56px} }
+</style>
+</head>
+<body>
+<canvas id="fw"></canvas>
+
+<div class="wrap">
+  <!-- PAGE 1 -->
+  <section id="page1" class="page active">
+    <div class="card">
+      <h1 class="shine">Happy Birthday, <span id="displayName">Roshni</span> 🎉</h1>
+      <p class="small">Wishing you all the love, light & magic today ✨</p>
+      <div style="margin-top:18px">
+        <button class="btn" onclick="goTo(2)">Open Candles →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 2: Candle blow + cake cutting -->
+  <section id="page2" class="page">
+    <div class="card">
+      <h1>Make a wish! 🕯️</h1>
+      <p class="small">Click / Tap the candle to blow — then cut the cake 🎂</p>
+
+      <div class="candle-wrap" id="candleWrap" title="Tap to blow">
+        <!-- candle image (hosted) -->
+        <img id="candleImg" class="candle-img" src="https://i.imgur.com/4AiXzf8.png" alt="candle">
+        <div id="blowHint" class="small">Tap the candle to blow</div>
+      </div>
+
+      <div id="cakeArea" class="hidden" style="margin-top:18px;">
+        <div class="bigcake">🎂</div>
+        <p id="cutHint" class="small">Tap cake to cut</p>
+      </div>
+
+      <div style="margin-top:16px">
+        <button class="btn" id="toPage3" style="display:none" onclick="goTo(3)">Next: Secret →</button>
+      </div>
+    </div>
+
+    <div class="confetti" id="confetti"></div>
+  </section>
+
+  <!-- PAGE 3: Secret message unlock -->
+  <section id="page3" class="page">
+    <div class="card" style="max-width:700px">
+      <h1>Secret Message 🔐</h1>
+      <p class="small">Type the secret word to unlock (hint: it's your cute nickname!)</p>
+      <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <input id="codeInput" type="text" placeholder="Type here...">
+        <button class="btn" onclick="checkCode()">Unlock</button>
+      </div>
+
+      <div id="secretMsg" class="hidden" style="margin-top:18px;text-align:left;font-size:18px;line-height:1.45;">
+        <strong>❤️ Secret:</strong>
+        <p style="margin-top:8px">
+          mera babu mera baccha meri Gudiya meri khuchupuchu meri rasmalai meri ladaku vimaan ✈️🫣,<br>
+          meri lado happy happy happy birthday 🎂 baccha... sach me thank you so much meri best friend banne ke liye ☺️ tu bahut acchi hai . Bas aise hi hmesha Khush rahna .. muskurate rahna ... Bahut pyari lagti hai 😂..
+        </p>
+      </div>
+
+      <div style="margin-top:14px">
+        <button class="btn" onclick="goTo(4)">Next: A message →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 4: Beauty message -->
+  <section id="page4" class="page">
+    <div class="card" style="max-width:760px">
+      <h1>For my beautiful friend 💖</h1>
+      <p style="font-size:18px;line-height:1.6">
+        Tum sach me bohot beautiful ho — sirf face se nahi, dil se bhi. Tumhari smile pure room ko bright kar deti hai ✨<br>
+        Tumhara sense of humor aur pyaar dono hi sabko khush kar dete hain. Bas hamesha aise hi muskurati raho. <br><br>
+        Lots of love — happy birthday again, <span id="finalName">Roshni</span> 🎂🎇
+      </p>
+    </div>
+  </section>
+</div>
+
+<!-- bottom nav -->
+<div class="nav" role="navigation">
+  <button class="btn" onclick="goTo(1)">Page 1</button>
+  <button class="btn" onclick="goTo(2)">Page 2</button>
+  <button class="btn" onclick="goTo(3)">Page 3</button>
+  <button class="btn" onclick="goTo(4)">Page 4</button>
+</div>
+
+<script>
+/* ---------- Page navigation ---------- */
+function goTo(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+  // small fireworks burst when pages change
+  fireworksBurst();
+}
+
+/* set display name (if you want to change name programmatically) */
+const name = "Roshni";
+document.getElementById('displayName').innerText = name;
+document.getElementById('finalName').innerText = name;
+
+/* ---------- Candle blow -> cake cut animations ---------- */
+const candleImg = document.getElementById('candleImg');
+const candleWrap = document.getElementById('candleWrap');
+const cakeArea = document.getElementById('cakeArea');
+const toPage3Btn = document.getElementById('toPage3');
+const confettiDiv = document.getElementById('confetti');
+
+let blown = false, cakeCut = false;
+
+candleWrap.addEventListener('click', ()=> {
+  if(blown) return;
+  blown = true;
+  // candle disappear (simulate blow)
+  candleImg.style.transition = 'transform 900ms ease, opacity 900ms';
+  candleImg.style.transform = 'translateY(-24px) scale(0.85)';
+  candleImg.style.opacity = '0';
+  document.getElementById('blowHint').innerText = 'Wish sent ✨';
+  setTimeout(()=> {
+    candleWrap.classList.add('hidden');
+    cakeArea.classList.remove('hidden');
+    // small fireworks + confetti
+    fireworksBurst(); runConfetti();
+  }, 900);
+});
+
+/* Cake cut: click the cake emoji to reveal cutting & confetti */
+const bigcake = document.querySelector('.bigcake');
+bigcake?.addEventListener?.('click', ()=> triggerCakeCut());
+
+function triggerCakeCut(){
+  if(cakeCut) return;
+  cakeCut = true;
+  document.getElementById('cutHint').innerText = 'Cut! 🎉';
+  // show confetti heavily
+  runConfetti(40);
+  // show next button
+  toPage3Btn.style.display = 'inline-block';
+}
+
+/* allow clicking cake area to cut (in case emoji not clickable on some devices) */
+document.getElementById('cakeArea')?.addEventListener?.('click', ()=> triggerCakeCut());
+
+/* ---------- Secret unlock ---------- */
+function checkCode(){
+  const val = document.getElementById('codeInput').value.trim().toLowerCase();
+  if(val === 'paglu'){
+    document.getElementById('secretMsg').classList.remove('hidden');
+    fireworksBurst();
+    runConfetti(30);
+  } else {
+    alert('Wrong word — try again :)');
+  }
+}
+
+/* ---------- Confetti (simple) ---------- */
+function runConfetti(count=25){
+  const W = confettiDiv.clientWidth || window.innerWidth;
+  const H = confettiDiv.clientHeight || window.innerHeight;
+  // clear old
+  confettiDiv.innerHTML = '';
+  for(let i=0;i<count;i++){
+    const el = document.createElement('div');
+    el.style.position='absolute';
+    el.style.left = (Math.random()*100)+'%';
+    el.style.top = '-10%';
+    el.style.width = (6+Math.random()*8)+'px';
+    el.style.height = (10+Math.random()*18)+'px';
+    el.style.opacity = 0.95;
+    el.style.transform = 'rotate('+Math.random()*360+'deg)';
+    el.style.background = `hsl(${Math.random()*360} 80% 60%)`;
+    el.style.borderRadius = '3px';
+    el.style.pointerEvents='none';
+    confettiDiv.appendChild(el);
+    // animate
+    const dx = (Math.random()-0.5)*200;
+    const dur = 1800 + Math.random()*1400;
+    el.animate([
+      { transform: `translate3d(0,0,0) rotate(${Math.random()*360}deg)`, opacity:1 },
+      { transform: `translate3d(${dx}px,${H+100}px,0) rotate(${Math.random()*720}deg)`, opacity:0.9 }
+    ], {duration:dur, easing:'cubic-bezier(.2,.7,.2,1)'});
+    setTimeout(()=> el.remove(), dur+200);
+  }
+}
+
+/* ---------- Fireworks canvas (simple) ---------- */
+const canvas = document.getElementById('fw');
+const ctx = canvas.getContext('2d');
+let w = canvas.width = innerWidth, h = canvas.height = innerHeight;
+window.addEventListener('resize', ()=> { w = canvas.width = innerWidth; h = canvas.height = innerHeight; });
+
+let rockets = [], particles = [];
+function random(a,b){ return a + Math.random()*(b-a); }
+function fireworksBurst(x=w/2,y=h/3){
+  const rx = x || random(100, w-100);
+  const ry = y || random(80, h/2);
+  // create particles
+  const hue = Math.floor(Math.random()*360);
+  for(let i=0;i<80;i++){
+    const angle = Math.random()*Math.PI*2;
+    const speed = random(1,6) * (1 + Math.random());
+    particles.push({
+      x: rx,
+      y: ry,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed,
+      life: 60 + Math.random()*40,
+      hue,
+      alpha:1
+    });
+  }
+}
+
+/* continuous draw */
+function step(){
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = 'rgba(6,6,10,0.35)';
+  ctx.fillRect(0,0,w,h);
+  ctx.globalCompositeOperation = 'lighter';
+  for(let i = particles.length - 1; i >= 0; i--){
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy + 0.3; // gravity
+    p.vx *= 0.99;
+    p.vy *= 0.99;
+    p.life--;
+    p.alpha = Math.max(0, p.life/100);
+    ctx.beginPath();
+    ctx.fillStyle = `hsla(${p.hue},90%,60%,${p.alpha})`;
+    ctx.moveTo(p.x, p.y);
+    ctx.arc(p.x, p.y, 2.2, 0, Math.PI*2);
+    ctx.fill();
+    if(p.life <= 0){ particles.splice(i,1); }
+  }
+  requestAnimationFrame(step);
+}
+step();
+
+/* small automatic fireworks every 4-6 sec as background sparkle */
+setInterval(()=> fireworksBurst(random(80,w-80), random(60,h/3)), 4200);
+
+/* ---------- allow Enter key for secret input ---------- */
+document.getElementById('codeInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') checkCode();
+});
+
+/* ---------- Helpful: let cake emoji be clickable on mobile by making it a button-like area ---------- */
+document.querySelectorAll('.bigcake').forEach(b=> {
+  b.style.cursor='pointer';
+  b.addEventListener('click', ()=> triggerCakeCut());
+});
+</script>
+</body>
+</html>
